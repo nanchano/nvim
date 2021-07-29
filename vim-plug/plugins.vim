@@ -38,4 +38,6 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'junegunn/gv.vim'
     " Quick searchs
     Plug 'justinmk/vim-sneak'
+    " Go syntax/helper
+    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
