@@ -24,7 +24,8 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
     " Ranger - file explorer
-    Plug 'kevinhwang91/rnvimr'
+    " Plug 'francoiscabrol/ranger.vim'
+    Plug 'kevinhwang91/rnvimr', {'do': 'make sync'}
     " Better search / file navigation
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
