@@ -6,7 +6,7 @@ source $HOME/.config/nvim/themes/airline.vim
 "source $HOME/.config/nvim/themes/onedark.vim
 "source $HOME/.config/nvim/themes/nord.vim
 "source $HOME/.config/nvim/themes/iceberg.vim
-"source $HOME/.config/nvim/themes/forestnight.vim
+"source $HOME/.config/nvim/themes/everforest.vim
 "source $HOME/.config/nvim/themes/warlock.vim
 source $HOME/.config/nvim/themes/yin.vim
 source $HOME/.config/nvim/plug-config/coc.vim

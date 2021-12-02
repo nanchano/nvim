@@ -17,7 +17,7 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'arcticicestudio/nord-vim'
     Plug 'joshdick/onedark.vim'
     Plug 'cocopon/iceberg.vim'
-    Plug 'sainnhe/forest-night'
+    Plug 'sainnhe/everforest'
     " Intellisense
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     " Status Line
