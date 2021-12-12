@@ -48,4 +48,6 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'justinmk/vim-sneak'
     " Go syntax/helper
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+    " For linting/fixing
+    Plug 'dense-analysis/ale'    
 call plug#end()

@@ -10,3 +10,4 @@ source $HOME/.config/nvim/plug-config/commentary.vim
 source $HOME/.config/nvim/plug-config/signify.vim
 source $HOME/.config/nvim/plug-config/sneak.vim
 source $HOME/.config/nvim/plug-config/vim-go.vim
+source $HOME/.config/nvim/plug-config/ale.vim
