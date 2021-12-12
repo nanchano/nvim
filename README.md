@@ -5,6 +5,7 @@
 1. Python 3 and pip installed
       * Save path in paths.vim
       * pip install pynvim
+      * pip install mypy flake8 black - for linting/fixing
 2. Node.js and npm installed
       * Save path in paths.vim
       * npm install -g neovim
@@ -12,7 +13,7 @@
 4. Vim-Plug installed - Plugin Manager
 5. Run :CocConfig to create coc-settings.json
 6. FZF, ripgrep, ctags-git, silversearcher-ac, fd-find installed
-      * all of them by pacman except ctags-git (AUR) 
+      * all of them by pacman except ctags-git (AUR)
 7. Ranger installed
       * Also clone devicons: git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
       * Ueberzug installed - AUR ideally, otherwise pip
