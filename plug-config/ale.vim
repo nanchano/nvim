@@ -1,6 +1,6 @@
 let g:ale_linters = {
 \   'python': ['flake8', 'mypy'],
-\   'go': ['gopls'],
+\   'go': ['gopls', 'golint'],
 \   'bash': ['bashate'],
 \}
 let g:ale_fixers = {
@@ -33,4 +33,4 @@ let g:airline#extensions#ale#enabled = 1
 
 " Python linting/fixing config
 let g:ale_python_flake8_options = '--max-line-length=88 --ignore=E266,501 --max-complexity=18 --select=B,C,E,F,W,T4'
-let g:ale_python_mypy_options = '--ignore-missing-imports'
+let g:ale_python_mypy_options = '--ignore-missing-imports=true'

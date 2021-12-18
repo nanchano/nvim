@@ -25,6 +25,7 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'kristijanhusak/vim-hybrid-material'
     Plug 'sts10/vim-pink-moon'
     Plug 'AlessandroYorba/Sierra'
+    Plug 'arzg/vim-substrata'
     " Intellisense
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     " Status Line
