@@ -16,3 +16,5 @@ set shiftwidth=4
 set expandtab
 "Use tabs at the beginning of the line and paragraph
 set smarttab
+"Folding
+let g:go_fold_enable = ['block', 'import', 'varconst', 'package_comment']
