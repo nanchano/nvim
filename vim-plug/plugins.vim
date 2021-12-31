@@ -51,4 +51,6 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
     " For linting/fixing
     Plug 'dense-analysis/ale'
+    " Python folding
+    Plug 'tmhedberg/SimpylFold'
 call plug#end()
