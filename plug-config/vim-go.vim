@@ -18,3 +18,5 @@ set expandtab
 set smarttab
 "Folding
 let g:go_fold_enable = ['block', 'import', 'varconst', 'package_comment']
+" Doc definitions popup in place
+let g:go_doc_popup_window = 1
