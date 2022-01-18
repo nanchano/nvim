@@ -40,5 +40,8 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Enter on insert on popup autocomplete suggestions wont create a new line
+inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : "\<CR>"
+
 nnoremap <Leader>o o<Esc>^Da
 nnoremap <Leader>O O<Esc>^Da
