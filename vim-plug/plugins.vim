@@ -26,25 +26,14 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'sts10/vim-pink-moon'
     Plug 'AlessandroYorba/Sierra'
     Plug 'arzg/vim-substrata'
-    " Intellisense
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
     " Status Line
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
-    " Ranger - file explorer
-    " Plug 'francoiscabrol/ranger.vim'
-    Plug 'kevinhwang91/rnvimr', {'do': 'make sync'}
-    " Better search / file navigation
-    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-    Plug 'junegunn/fzf.vim'
-    Plug 'airblade/vim-rooter'
     " Faster comments
     Plug 'tpope/vim-commentary'
     " Git integration
     Plug 'mhinz/vim-signify'
     Plug 'tpope/vim-fugitive'
-    Plug 'tpope/vim-rhubarb'
-    Plug 'junegunn/gv.vim'
     " Quick searchs
     Plug 'justinmk/vim-sneak'
     " Go syntax/helper
