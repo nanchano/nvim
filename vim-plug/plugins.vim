@@ -42,4 +42,6 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'dense-analysis/ale'
     " Python folding
     Plug 'tmhedberg/SimpylFold'
+    " Autocomplete
+    Plug 'maxboisvert/vim-simple-complete'
 call plug#end()
