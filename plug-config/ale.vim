@@ -1,16 +1,21 @@
 " autocomplete
+set completeopt=menu,menuone,preview,noselect,noinsert
 let g:ale_completion_enabled = 1
 
 let g:ale_linters = {
 \   'python': ['flake8', 'mypy'],
 \   'go': ['gopls', 'golint'],
 \   'bash': ['bashate'],
+\   'rust': ['cargo'],
+\   'scala': ['sbtserver'],
 \}
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'python': ['autoflake', 'autoimport', 'isort', 'black'],
 \   'go': ['gofmt', 'golines', 'goimports'],
 \   'bash': ['shfmt'],
+\   'rust': ['rustfmt'],
+\   'scala': ['scalafmt']
 \}
 
 " Fixing

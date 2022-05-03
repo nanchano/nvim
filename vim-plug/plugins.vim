@@ -38,6 +38,10 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'justinmk/vim-sneak'
     " Go syntax/helper
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+    " Rust syntax/helper
+    Plug 'rust-lang/rust.vim'
+    " Scala syntax/helper
+    Plug 'derekwyatt/vim-scala'
     " For linting/fixing
     Plug 'dense-analysis/ale'
     " Python folding
