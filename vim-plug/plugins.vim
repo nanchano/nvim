@@ -13,18 +13,7 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     " Auto pairs for '(' '[' '{'
     Plug 'jiangmiao/auto-pairs'
     " Theme
-    Plug 'romainl/Apprentice'
-    Plug 'arcticicestudio/nord-vim'
-    Plug 'joshdick/onedark.vim'
     Plug 'cocopon/iceberg.vim'
-    Plug 'sainnhe/everforest'
-    Plug 'embark-theme/vim', { 'as': 'embark', 'branch': 'main' }
-    Plug 'nanotech/jellybeans.vim'
-    Plug 'tyrannicaltoucan/vim-deep-space'
-    Plug 'wadackel/vim-dogrun'
-    Plug 'kristijanhusak/vim-hybrid-material'
-    Plug 'sts10/vim-pink-moon'
-    Plug 'AlessandroYorba/Sierra'
     Plug 'arzg/vim-substrata'
     " Status Line
     Plug 'vim-airline/vim-airline'

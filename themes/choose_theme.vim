@@ -1,15 +1,3 @@
-"source $HOME/.config/nvim/themes/apprentice.vim
-"source $HOME/.config/nvim/themes/onedark.vim
-"source $HOME/.config/nvim/themes/nord.vim
-"source $HOME/.config/nvim/themes/iceberg.vim
-"source $HOME/.config/nvim/themes/everforest.vim
-"source $HOME/.config/nvim/themes/warlock.vim
-"source $HOME/.config/nvim/themes/yin.vim
-"source $HOME/.config/nvim/themes/embark.vim
-"source $HOME/.config/nvim/themes/jellybeans.vim
-"source $HOME/.config/nvim/themes/deep-space.vim
-"source $HOME/.config/nvim/themes/dogrun.vim
-"source $HOME/.config/nvim/themes/hybrid_material.vim
-"source $HOME/.config/nvim/themes/pink-moon.vim
-"source $HOME/.config/nvim/themes/sierra.vim
+" source $HOME/.config/nvim/themes/iceberg.vim
+" source $HOME/.config/nvim/themes/yin.vim
 source $HOME/.config/nvim/themes/substrata.vim
