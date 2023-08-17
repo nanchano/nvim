@@ -1,8 +1,11 @@
+local vim = vim
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 -- NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+
 
 -- Install package manager
 -- https://github.com/folke/lazy.nvim
@@ -52,9 +55,15 @@ require('lazy').setup({
         },
     },
 
-
     -- Detect tabstop and shiftwidth automatically
     'tpope/vim-sleuth',
+
+    -- Autopairs
+    {
+        'windwp/nvim-autopairs',
+        event = "InsertEnter",
+        opts = {}
+    },
 
     -- NOTE: This is where your plugins related to LSP can be installed.
     --  The configuration is done below. Search for lspconfig to find it below.
@@ -134,6 +143,12 @@ require('lazy').setup({
     { import = 'plugins' },
 
 }, {})
+
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldnestmax = 10
+vim.opt.foldlevelstart = 10
+vim.opt.foldlevel = 2
 
 -- Set highlight on search
 vim.o.hlsearch = false
