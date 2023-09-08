@@ -94,11 +94,9 @@ require('lazy').setup({
     },
 
     {
-        'rose-pine/neovim',
-        as = 'rose-pine',
-        variant = 'main',
+        'kyazdani42/blue-moon',
         config = function()
-            vim.cmd.colorscheme 'rose-pine'
+            vim.cmd.colorscheme 'blue-moon'
         end,
     },
 
@@ -107,7 +105,6 @@ require('lazy').setup({
         opts = {
             options = {
                 icons_enabled = false,
-                theme = 'rose-pine',
                 component_separators = '|',
                 section_separators = '',
             },
