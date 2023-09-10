@@ -378,6 +378,7 @@ end
 local servers = {
     gopls = {
         completeUnimported = true,
+        usePlaceholders = true,
     },
     pyright = {},
     html = { filetypes = { 'html', 'twig', 'hbs' } },
