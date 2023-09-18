@@ -94,9 +94,10 @@ require('lazy').setup({
     },
 
     {
-        'kyazdani42/blue-moon',
+        "ntk148v/habamax.nvim",
+        dependencies = { "rktjmp/lush.nvim" },
         config = function()
-            vim.cmd.colorscheme 'blue-moon'
+            vim.cmd.colorscheme 'habamax'
         end,
     },
 
@@ -105,7 +106,7 @@ require('lazy').setup({
         opts = {
             options = {
                 icons_enabled = false,
-                theme = 'nightfly',
+                theme = 'habamax',
                 component_separators = '|',
                 section_separators = '',
             },
@@ -382,7 +383,7 @@ local servers = {
     },
     pyright = {},
     html = { filetypes = { 'html', 'twig', 'hbs' } },
-
+    terraformls = { filetypes = { 'hcl', 'terraform', 'tf', 'tfvars' } },
     lua_ls = {
         Lua = {
             workspace = { checkThirdParty = false },
