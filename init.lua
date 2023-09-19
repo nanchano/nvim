@@ -94,10 +94,10 @@ require('lazy').setup({
     },
 
     {
-        "ntk148v/habamax.nvim",
+        'ntk148v/habamax.nvim',
         dependencies = { "rktjmp/lush.nvim" },
         config = function()
-            vim.cmd.colorscheme 'habamax'
+            vim.cmd.colorscheme 'habamax.nvim'
         end,
     },
 
@@ -378,8 +378,41 @@ end
 -- define the property 'filetypes' to the map in question.
 local servers = {
     gopls = {
-        completeUnimported = true,
-        usePlaceholders = true,
+        settings = {
+            gopls = {
+                gofumpt = true,
+                codelenses = {
+                    gc_details = false,
+                    generate = true,
+                    regenerate_cgo = true,
+                    run_govulncheck = true,
+                    test = true,
+                    tidy = true,
+                    upgrade_dependency = true,
+                    vendor = true,
+                },
+                hints = {
+                    assignVariableTypes = true,
+                    compositeLiteralFields = true,
+                    compositeLiteralTypes = true,
+                    constantValues = true,
+                    functionTypeParameters = true,
+                    parameterNames = true,
+                    rangeVariableTypes = true,
+                },
+                analyses = {
+                    fieldalignment = true,
+                    nilness = true,
+                    unusedparams = true,
+                    unusedwrite = true,
+                    useany = true,
+                },
+                usePlaceholders = true,
+                completeUnimported = true,
+                staticcheck = true,
+                semanticTokens = true,
+            },
+        },
     },
     pyright = {},
     html = { filetypes = { 'html', 'twig', 'hbs' } },
@@ -422,7 +455,11 @@ mason_lspconfig.setup_handlers {
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
-luasnip.config.setup {}
+luasnip.config.setup {
+    history = true,
+    region_check_events = 'InsertEnter',
+    delete_check_events = 'TextChanged,InsertLeave',
+}
 
 cmp.setup {
     snippet = {
