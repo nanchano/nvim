@@ -14,6 +14,25 @@ return {
       print('Setting autoformatting to: ' .. tostring(format_is_enabled))
     end, {})
 
+    -- goimports
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      pattern = { "*.go" },
+      callback = function()
+        local params = vim.lsp.util.make_range_params(nil, "utf-16")
+        params.context = { only = { "source.organizeImports" } }
+        local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
+        for _, res in pairs(result or {}) do
+          for _, r in pairs(res.result or {}) do
+            if r.edit then
+              vim.lsp.util.apply_workspace_edit(r.edit, "utf-16")
+            else
+              vim.lsp.buf.execute_command(r.command)
+            end
+          end
+        end
+      end,
+    })
+
     -- Create an augroup that is used for managing our formatting autocmds.
     -- We need one augroup per client to make sure that multiple clients
     -- can attach to the same buffer without interfering with each other.
