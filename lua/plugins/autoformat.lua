@@ -3,6 +3,8 @@
 -- Use your language server to automatically format your code on save.
 -- Adds additional commands as well to manage the behavior
 
+local vim = vim
+
 return {
   'neovim/nvim-lspconfig',
   config = function()
@@ -32,6 +34,19 @@ return {
         end
       end,
     })
+
+
+    -- Formatting for python
+
+    local null_ls = require("null-ls")
+    local sources = {
+      null_ls.builtins.formatting.black,
+      null_ls.builtins.formatting.isort,
+    }
+    null_ls.setup({
+      sources = sources,
+    })
+
 
     -- Create an augroup that is used for managing our formatting autocmds.
     -- We need one augroup per client to make sure that multiple clients

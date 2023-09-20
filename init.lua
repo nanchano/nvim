@@ -79,6 +79,8 @@ require('lazy').setup({
         },
     },
 
+    'jose-elias-alvarez/null-ls.nvim',
+
     {
         -- Autocompletion
         'hrsh7th/nvim-cmp',
@@ -414,7 +416,24 @@ local servers = {
             },
         },
     },
-    pyright = {},
+    pyright = {
+        settings = {
+            pyright = {
+                disableLanguageServices = false,
+                disableOrganizeImports = false
+            },
+            python = {
+                analysis = {
+                    autoImportCompletions = true,
+                    autoSearchPaths = true,
+                    diagnosticMode = "workspace",
+                    typeCheckingMode = "basic",
+                    useLibraryCodeForTypes = true
+                }
+            }
+        },
+        filetypes = { 'python' },
+    },
     html = { filetypes = { 'html', 'twig', 'hbs' } },
     terraformls = { filetypes = { 'hcl', 'terraform', 'tf', 'tfvars' } },
     lua_ls = {
