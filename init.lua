@@ -469,6 +469,12 @@ mason_lspconfig.setup_handlers {
     end
 }
 
+
+require('lspconfig').svelte.setup {
+    -- Add filetypes for the server to run and share info between files
+    filetypes = { 'typescript', 'javascript', 'svelte', 'html', 'css' },
+}
+
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
 local cmp = require 'cmp'
