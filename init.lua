@@ -65,6 +65,8 @@ require('lazy').setup({
         opts = {}
     },
 
+    { "ellisonleao/glow.nvim", config = true, cmd = "Glow" },
+
     -- NOTE: This is where your plugins related to LSP can be installed.
     --  The configuration is done below. Search for lspconfig to find it below.
     {
@@ -255,7 +257,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'bash', 'go', 'lua', 'python' },
+    ensure_installed = { 'bash', 'go', 'lua', 'python', 'terraform', 'typescript', 'svelte', 'html', 'css', 'markdown' },
 
     sync_install = false,
 
@@ -434,7 +436,6 @@ local servers = {
         },
         filetypes = { 'python' },
     },
-    html = { filetypes = { 'html', 'twig', 'hbs' } },
     terraformls = { filetypes = { 'hcl', 'terraform', 'tf', 'tfvars' } },
     lua_ls = {
         Lua = {
@@ -472,7 +473,7 @@ mason_lspconfig.setup_handlers {
 
 require('lspconfig').svelte.setup {
     -- Add filetypes for the server to run and share info between files
-    filetypes = { 'typescript', 'javascript', 'svelte', 'html', 'css' },
+    filetypes = { 'javascript', 'svelte', 'html', 'css' },
 }
 
 -- [[ Configure nvim-cmp ]]
