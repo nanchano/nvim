@@ -31,7 +31,6 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
     -- Git related plugins
     'tpope/vim-fugitive',
-    'tpope/vim-rhubarb',
     {
         -- Adds git related signs to the gutter, as well as utilities for managing changes
         'lewis6991/gitsigns.nvim',
@@ -44,14 +43,6 @@ require('lazy').setup({
                 topdelete = { text = '‾' },
                 changedelete = { text = '~' },
             },
-            on_attach = function(bufnr)
-                vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
-                    { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-                vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk,
-                    { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-                vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk,
-                    { buffer = bufnr, desc = '[P]review [H]unk' })
-            end,
         },
     },
 
@@ -151,6 +142,11 @@ require('lazy').setup({
     { import = 'plugins' },
 
 }, {})
+
+require('Comment').setup({
+    padding = false,
+    ignore = '^$',
+})
 
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
@@ -443,6 +439,7 @@ local servers = {
             telemetry = { enable = false },
         },
     },
+    svelte = { filetypes = { 'javascript', 'svelte', 'html', 'css' }, }
 }
 
 -- -- Setup neovim lua configuration
@@ -470,11 +467,6 @@ mason_lspconfig.setup_handlers {
     end
 }
 
-
-require('lspconfig').svelte.setup {
-    -- Add filetypes for the server to run and share info between files
-    filetypes = { 'javascript', 'svelte', 'html', 'css' },
-}
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
