@@ -18,7 +18,7 @@ return {
 
     -- goimports
     vim.api.nvim_create_autocmd("BufWritePre", {
-      pattern = { "*.go" },
+      pattern = { "*.go", "*.templ" },
       callback = function()
         local params = vim.lsp.util.make_range_params(nil, "utf-16")
         params.context = { only = { "source.organizeImports" } }
@@ -35,11 +35,10 @@ return {
       end,
     })
 
-
-    -- Formatting for python
-
+    -- null-ls
     local null_ls = require("null-ls")
     local sources = {
+      null_ls.builtins.formatting.jq,
       null_ls.builtins.formatting.black,
       null_ls.builtins.formatting.isort.with({
         extra_args = { "--profile", "black" }
@@ -49,6 +48,22 @@ return {
       sources = sources,
     })
 
+    local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+    require("null-ls").setup({
+      -- you can reuse a shared lspconfig on_attach callback here
+      on_attach = function(client, bufnr)
+        if client.supports_method("textDocument/formatting") then
+          vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            group = augroup,
+            buffer = bufnr,
+            callback = function()
+              vim.lsp.buf.formatting_sync()
+            end,
+          })
+        end
+      end,
+    })
 
     -- Create an augroup that is used for managing our formatting autocmds.
     -- We need one augroup per client to make sure that multiple clients
@@ -82,6 +97,10 @@ return {
         -- Tsserver usually works poorly. Sorry you work with bad languages
         -- You can remove this line if you know what you're doing :)
         if client.name == 'tsserver' then
+          return
+        end
+
+        if client.name == 'html' then
           return
         end
 

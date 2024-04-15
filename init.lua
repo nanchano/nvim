@@ -5,7 +5,7 @@ local vim = vim
 -- NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-
+vim.filetype.add({ extension = { templ = 'templ' } })
 
 -- Install package manager
 -- https://github.com/folke/lazy.nvim
@@ -133,12 +133,11 @@ require('lazy').setup({
         'nvim-treesitter/nvim-treesitter',
         dependencies = {
             'nvim-treesitter/nvim-treesitter-textobjects',
+            'vrischmann/tree-sitter-templ',
         },
         build = ':TSUpdate',
     },
 
-    -- require 'lua.plugins.autoformat',
-    -- require('lazy').setup('plugins'),
     { import = 'plugins' },
 
 }, {})
@@ -253,8 +252,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'bash', 'go', 'lua', 'python', 'terraform', 'typescript', 'svelte', 'html', 'css', 'markdown',
-        'json' },
+    ensure_installed = { 'bash', 'go', 'lua', 'python', 'terraform', 'html', 'css', 'markdown', 'json' },
 
     sync_install = false,
 
@@ -440,7 +438,9 @@ local servers = {
             telemetry = { enable = false },
         },
     },
-    svelte = { filetypes = { 'javascript', 'svelte', 'html', 'css' }, }
+    html = { filetypes = { 'html', 'templ' } },
+    htmx = { filetypes = { 'html', 'templ' } },
+    templ = { filetypes = { 'templ' } },
 }
 
 -- -- Setup neovim lua configuration
