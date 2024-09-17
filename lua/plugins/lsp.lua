@@ -47,6 +47,7 @@ return {
 		lazy = false,
 		config = function()
 			local cmp = require 'cmp'
+			local lspconfig = require 'lspconfig'
 			local cmp_lsp = require 'cmp_nvim_lsp'
 			local mason_lspconfig = require 'mason-lspconfig'
 			local cmp_select = { behavior = cmp.SelectBehavior.Select }
@@ -61,6 +62,18 @@ return {
 					}
 				end,
 			}
+
+			lspconfig.lua_ls.setup({
+				capabilities = capabilities,
+				settings = {
+					Lua = {
+						diagnostics = {
+							-- Get the language server to recognize the `vim` global
+							globals = { 'vim', 'require' },
+						},
+					},
+				},
+			})
 
 			cmp.setup {
 				snippet = {
