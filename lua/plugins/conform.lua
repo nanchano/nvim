@@ -10,6 +10,9 @@ return {
 				go = { "gofmt", "goimports" },
 				json = { "jq" },
 				terraform = { "terraform_fmt" },
+				svelte = { "prettier" },
+				javascript = { 'prettier' },
+				typescript = { 'prettier' }
 			},
 			format_on_save = {
 				lsp_format = "fallback",
