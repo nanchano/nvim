@@ -29,7 +29,6 @@ return {
 					'gopls',
 					'jsonlint',
 					'lua-language-server',
-					'pyright',
 					'ruff',
 				},
 			}
@@ -73,6 +72,25 @@ return {
 						},
 					},
 				},
+			})
+
+			lspconfig.ruff.setup({
+				cmd = { vim.fn.expand("$HOME") .. "/.local/bin/ruff", "server" },
+				filetypes = { 'python' },
+				root_dir = function(fname)
+					local root = lspconfig.util.root_pattern('pyproject.toml', 'ruff.toml', '.ruff.toml')(fname)
+					if root then
+						return root
+					end
+					local git_dir = vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
+					if git_dir then
+						return git_dir
+					end
+					-- If no project root is found, return the directory of the current file as a last resort
+					return vim.fs.dirname(fname)
+				end,
+				single_file_support = true,
+				settings = {}
 			})
 
 			cmp.setup {
