@@ -22,7 +22,6 @@ return {
 				"yamlls",
 				"lua_ls",
 				"pyright",
-				"ruff",
 				"gopls",
 				"terraformls",
 			},
@@ -33,7 +32,6 @@ return {
 		dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-lint" },
 		opts = {
 			ensure_installed = {
-				"ruff",
 				"jsonlint",
 				"yamllint",
 			},
