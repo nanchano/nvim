@@ -34,3 +34,6 @@ vim.o.timeoutlen = 300
 vim.o.completeopt = 'menuone,noselect'
 
 vim.o.termguicolors = true
+
+vim.g.loaded_python3_provider = 0
+vim.g.python3_host_prog = '~/.pyenv/versions/3.12.8/bin/python3'
