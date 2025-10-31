@@ -5,26 +5,15 @@ return {
 
 		conform.setup({
 			formatters_by_ft = {
-				lua = { "stylua" },
 				python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
 				go = { "gofmt", "goimports" },
 				json = { "jq" },
 				terraform = { "terraform_fmt" },
-				svelte = { "prettier" },
-				javascript = { 'prettier' },
-				typescript = { 'prettier' }
 			},
 			format_on_save = {
 				lsp_format = "fallback",
-				timeout_ms = 1000,
+				timeout_ms = 500,
 			},
 		})
-
-		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
-			conform.format({
-				lsp_fallback = true,
-				timeout_ms = 1000,
-			})
-		end, { desc = "Format file or range (in visual mode)" })
 	end,
 }

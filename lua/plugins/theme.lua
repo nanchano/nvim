@@ -1,20 +1,18 @@
 return {
 	{
-		'ntk148v/habamax.nvim',
-		dependencies = { "rktjmp/lush.nvim" },
-		config = function()
-			vim.cmd.colorscheme 'habamax.nvim'
-		end,
-	},
-	{
 		'nvim-lualine/lualine.nvim',
-		opts = {
-			options = {
-				icons_enabled = false,
-				theme = 'habamax',
-				component_separators = '|',
-				section_separators = '',
-			},
-		},
+		dependencies = { "thesimonho/kanagawa-paper.nvim" },
+		config = function()
+			vim.cmd.colorscheme("kanagawa-paper-ink")
+			local kanagawa_paper = require("lualine.themes.kanagawa-paper-ink")
+			require("lualine").setup({
+				options = {
+					icons_enabled = false,
+					theme = kanagawa_paper,
+					component_separators = '|',
+					section_separators = '',
+				},
+			})
+		end,
 	}
 }
