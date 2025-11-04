@@ -15,5 +15,9 @@ return {
 				timeout_ms = 500,
 			},
 		})
+
+		conform.formatters.jq = {
+			args = { "--indent", "2" },
+		}
 	end,
 }
