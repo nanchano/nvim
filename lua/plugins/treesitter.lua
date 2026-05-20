@@ -1,22 +1,40 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
+		version = false,
 		build = ":TSUpdate",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+		},
 		config = function()
-			local config = require("nvim-treesitter.configs")
-			config.setup({
-				ensure_installed = { 'bash', 'go', 'lua', 'python', 'terraform', 'json', 'yaml' },
+			require("nvim-treesitter.configs").setup({
+				ensure_installed = {
+					"bash",
+					"go",
+					"lua",
+					"python",
+					"terraform",
+					"json",
+					"yaml",
+					"vim",
+					"vimdoc",
+					-- markdown disabled for now due to the current crash path
+					-- "markdown",
+					-- "markdown_inline",
+				},
 				auto_install = true,
 				sync_install = false,
-				highlight = { enable = true },
+				highlight = {
+					enable = true,
+				},
 				indent = { enable = true },
 				incremental_selection = {
 					enable = true,
 					keymaps = {
-						init_selection = '<c-space>',
-						node_incremental = '<c-space>',
-						scope_incremental = '<c-s>',
-						node_decremental = '<M-space>',
+						init_selection = "<C-space>",
+						node_incremental = "<C-space>",
+						scope_incremental = "<C-s>",
+						node_decremental = "<M-space>",
 					},
 				},
 				textobjects = {
@@ -24,45 +42,45 @@ return {
 						enable = true,
 						lookahead = true,
 						keymaps = {
-							['aa'] = '@parameter.outer',
-							['ia'] = '@parameter.inner',
-							['af'] = '@function.outer',
-							['if'] = '@function.inner',
-							['ac'] = '@class.outer',
-							['ic'] = '@class.inner',
+							["aa"] = "@parameter.outer",
+							["ia"] = "@parameter.inner",
+							["af"] = "@function.outer",
+							["if"] = "@function.inner",
+							["ac"] = "@class.outer",
+							["ic"] = "@class.inner",
 						},
 					},
 					move = {
 						enable = true,
 						set_jumps = true,
 						goto_next_start = {
-							[']m'] = '@function.outer',
-							[']]'] = '@class.outer',
+							["]m"] = "@function.outer",
+							["]]"] = "@class.outer",
 						},
 						goto_next_end = {
-							[']M'] = '@function.outer',
-							[']['] = '@class.outer',
+							["]M"] = "@function.outer",
+							["]["] = "@class.outer",
 						},
 						goto_previous_start = {
-							['[m'] = '@function.outer',
-							['[['] = '@class.outer',
+							["[m"] = "@function.outer",
+							["[["] = "@class.outer",
 						},
 						goto_previous_end = {
-							['[M'] = '@function.outer',
-							['[]'] = '@class.outer',
+							["[M"] = "@function.outer",
+							["[]"] = "@class.outer",
 						},
 					},
 					swap = {
 						enable = true,
 						swap_next = {
-							['<leader>a'] = '@parameter.inner',
+							["<leader>a"] = "@parameter.inner",
 						},
 						swap_previous = {
-							['<leader>A'] = '@parameter.inner',
+							["<leader>A"] = "@parameter.inner",
 						},
 					},
 				},
 			})
-		end
-	}
+		end,
+	},
 }
