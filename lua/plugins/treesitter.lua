@@ -7,21 +7,9 @@ return {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
 		config = function()
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = {
-					"bash",
-					"go",
-					"lua",
-					"python",
-					"terraform",
-					"json",
-					"yaml",
-					"vim",
-					"vimdoc",
-					-- markdown disabled for now due to the current crash path
-					-- "markdown",
-					-- "markdown_inline",
-				},
+			local config = require("nvim-treesitter.configs")
+			config.setup({
+				ensure_installed = { 'bash', 'go', 'lua', 'python', 'terraform', 'json', 'yaml', 'helm', 'gotmpl' },
 				auto_install = true,
 				sync_install = false,
 				highlight = {

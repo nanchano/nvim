@@ -34,7 +34,6 @@ return {
 		opts = {
 			ensure_installed = {
 				"jsonlint",
-				"yamllint",
 			},
 		},
 	},

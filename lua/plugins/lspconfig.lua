@@ -4,6 +4,24 @@ return {
 	dependencies = {
 		"williamboman/mason.nvim",
 	},
+	init = function()
+		vim.lsp.config("yamlls", {
+			settings = {
+				yaml = {
+					validate = true,
+					hover = true,
+					completion = true,
+					keyOrdering = false,
+					format = {
+						enable = false,
+					},
+					schemaStore = {
+						enable = true,
+					},
+				},
+			},
+		})
+	end,
 	config = function()
 		local keymap = vim.keymap
 
