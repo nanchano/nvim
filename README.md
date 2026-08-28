@@ -36,7 +36,7 @@ and does not require GNU `timeout`. The clipboard provider remains optional for
 headless startup but is needed for system clipboard integration.
 
 Mason owns the editor-specific tools, including language servers, Ruff,
-`jsonlint`, `goimports`, `jq`, Terraform, Terraform LS, and Tree-sitter CLI.
+`goimports`, `jq`, Terraform, Terraform LS, and Tree-sitter CLI.
 The Tree-sitter CLI must be at least 0.26.1; the current Mason registry installs
 0.26.13. It is deliberately not installed through npm, following
 [nvim-treesitter's requirements](https://github.com/nvim-treesitter/nvim-treesitter#requirements).

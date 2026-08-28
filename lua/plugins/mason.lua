@@ -16,7 +16,7 @@ return {
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		dependencies = { "williamboman/mason.nvim" },
 		opts = {
-			ensure_installed = require("tooling"),
+			ensure_installed = require("tooling").ensure_installed,
 			run_on_start = false,
 			start_delay = 0,
 		},
@@ -25,11 +25,6 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		dependencies = { "williamboman/mason.nvim" },
 		event = { "BufReadPre", "BufNewFile" },
-		opts = {},
-	},
-	{
-		"rshkarin/mason-nvim-lint",
-		dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-lint" },
-		opts = { automatic_installation = false },
+		opts = { automatic_enable = false },
 	},
 }

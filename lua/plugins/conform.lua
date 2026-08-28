@@ -2,14 +2,10 @@ return {
 	"stevearc/conform.nvim",
 	config = function()
 		local conform = require("conform")
+		local tooling = require("tooling")
 
 		conform.setup({
-			formatters_by_ft = {
-				python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
-				go = { "gofmt", "goimports" },
-				json = { "jq" },
-				terraform = { "terraform_fmt" },
-			},
+			formatters_by_ft = tooling.formatters_by_ft,
 			format_on_save = {
 				lsp_format = "fallback",
 				timeout_ms = 500,

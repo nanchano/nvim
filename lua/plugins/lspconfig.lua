@@ -6,29 +6,19 @@ return {
 		"hrsh7th/cmp-nvim-lsp",
 	},
 	init = function()
+		local tooling = require("tooling")
+
 		vim.lsp.config("*", {
 			capabilities = require("cmp_nvim_lsp").default_capabilities(),
 		})
 
-		vim.lsp.config("yamlls", {
-			settings = {
-				yaml = {
-					validate = true,
-					hover = true,
-					completion = true,
-					keyOrdering = false,
-					format = {
-						enable = false,
-					},
-					schemaStore = {
-						enable = true,
-					},
-				},
-			},
-		})
+		for server, config in pairs(tooling.servers) do
+			vim.lsp.config(server, config)
+		end
 	end,
 	config = function()
 		local keymap = vim.keymap
+		local tooling = require("tooling")
 
 		vim.api.nvim_create_autocmd("LspAttach", {
 			callback = function(ev)
@@ -97,23 +87,6 @@ return {
 		-- enable inlay hint
 		vim.lsp.inlay_hint.enable(true)
 
-		-- lua: recognize "vim" and "mp" global
-		vim.lsp.config("lua_ls", {
-			settings = {
-				Lua = {
-					diagnostics = {
-						globals = { "vim", "mp" },
-					},
-				},
-			},
-		})
-
-		vim.lsp.config("gopls", {
-			settings = {
-				gopls = {
-					buildFlags = { "-tags=integration" },
-				},
-			},
-		})
+		vim.lsp.enable(vim.tbl_keys(tooling.servers))
 	end,
 }
