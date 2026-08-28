@@ -22,6 +22,13 @@ return {
 
 		vim.api.nvim_create_autocmd("LspAttach", {
 			callback = function(ev)
+				local client = vim.lsp.get_client_by_id(ev.data.client_id)
+				if client then
+					-- Keep syntax colors controlled by Tree-sitter. Neovim otherwise
+					-- starts semantic-token highlighting after this callback runs.
+					client.server_capabilities.semanticTokensProvider = nil
+				end
+
 				-- buffer local mappings
 				local opts = { buffer = ev.buf, silent = true }
 
