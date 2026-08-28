@@ -5,8 +5,9 @@ Lua configuration for Neovim, based on
 
 ## Bootstrap
 
-This configuration targets the stable Neovim 0.12.5 release on Linux x86-64.
-The bootstrap installs the checksum-verified official Neovim archive under
+This configuration targets the stable Neovim 0.12.5 release on Linux x86-64
+and macOS (Apple Silicon or Intel). The bootstrap detects the platform, installs
+the matching checksum-verified official Neovim archive under
 `~/.local/share/nvim-bootstrap`, links it as `~/.local/bin/nvim`, synchronizes
 the locked plugins, installs the configured Mason tools, and runs the smoke
 suite:
@@ -24,13 +25,15 @@ The following base tools must already be supplied by the operating system:
 - A C/C++ build toolchain
 - Node.js and npm
 - `fd` (`fd-find` on Debian/Devuan)
-- A clipboard provider such as `xclip`
 - ripgrep
+- A clipboard provider such as `xclip` on Linux (`pbcopy` is built into macOS)
 
 On Debian or Devuan, the bootstrap prints the appropriate `apt` command if a
-required base tool is missing. It also links Debian's `fdfind` executable as
-`~/.local/bin/fd`. The clipboard provider remains optional for headless startup
-but is needed for system clipboard integration.
+required base tool is missing. On macOS, install the Xcode Command Line Tools,
+Node.js/npm, and ripgrep first. The script uses `sha256sum` on Linux or built-in
+`shasum` on macOS, clears macOS quarantine metadata before extracting Neovim,
+and does not require GNU `timeout`. The clipboard provider remains optional for
+headless startup but is needed for system clipboard integration.
 
 Mason owns the editor-specific tools, including language servers, Ruff,
 `jsonlint`, `goimports`, `jq`, Terraform, Terraform LS, and Tree-sitter CLI.
@@ -38,9 +41,11 @@ The Tree-sitter CLI must be at least 0.26.1; the current Mason registry installs
 0.26.13. It is deliberately not installed through npm, following
 [nvim-treesitter's requirements](https://github.com/nvim-treesitter/nvim-treesitter#requirements).
 
-The Neovim version and archive checksum in `scripts/bootstrap` are intentionally
-pinned. Update both values together when moving to a newer stable release. See
-the [official Neovim releases](https://github.com/neovim/neovim/releases).
+The Neovim and `fd` versions and per-platform checksums in `scripts/bootstrap`
+are intentionally pinned. Update each asset and checksum together when moving
+to a newer stable release. See the
+[official Neovim releases](https://github.com/neovim/neovim/releases) and
+[official fd releases](https://github.com/sharkdp/fd/releases).
 
 ## Debugging startup
 

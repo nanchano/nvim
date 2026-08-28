@@ -73,13 +73,48 @@ error_pattern='Error detected|Error in command line|Failed to run|E[0-9][0-9][0-
 failures=0
 timeout_seconds=60
 
+run_with_timeout() {
+	local seconds=$1
+	shift
+	local command_pid watcher_pid exit_code
+
+	if [[ ${NVIM_CHECK_PORTABLE_TIMEOUT:-0} != 1 ]] && command -v timeout >/dev/null 2>&1; then
+		timeout "${seconds}s" "$@"
+		return
+	fi
+	if [[ ${NVIM_CHECK_PORTABLE_TIMEOUT:-0} != 1 ]] && command -v gtimeout >/dev/null 2>&1; then
+		gtimeout "${seconds}s" "$@"
+		return
+	fi
+
+	"$@" &
+	command_pid=$!
+	(
+		local elapsed=0
+		while kill -0 "$command_pid" 2>/dev/null; do
+			if (( elapsed >= seconds )); then
+				kill -TERM "$command_pid" 2>/dev/null
+				exit
+			fi
+			sleep 1
+			elapsed=$((elapsed + 1))
+		done
+	) &
+	watcher_pid=$!
+	wait "$command_pid"
+	exit_code=$?
+	kill -TERM "$watcher_pid" 2>/dev/null
+	wait "$watcher_pid" 2>/dev/null
+	return "$exit_code"
+}
+
 run_check() {
 	local name=$1
 	shift
 	local log="$artifact_dir/$name.log"
 	local exit_code
 
-	NVIM_APPNAME=nvim timeout "${timeout_seconds}s" nvim --headless "$@" >"$log" 2>&1
+	NVIM_APPNAME=nvim run_with_timeout "$timeout_seconds" nvim --headless "$@" >"$log" 2>&1
 	exit_code=$?
 
 	if (( exit_code != 0 )) || grep -Eq "$error_pattern" "$log"; then
@@ -135,7 +170,7 @@ run_check terraform "$temp_dir/sample.tf" '+doautocmd BufReadPost' '+lua assert(
 
 # Health output is evidence for diagnosis, not a pass/fail gate: many providers
 # and language-specific tools are intentionally optional.
-NVIM_APPNAME=nvim timeout 45s nvim --headless "$temp_dir/sample.lua" '+checkhealth' '+write! '"$artifact_dir/health.log" '+qa' \
+NVIM_APPNAME=nvim run_with_timeout 45 nvim --headless "$temp_dir/sample.lua" '+checkhealth' '+write! '"$artifact_dir/health.log" '+qa' \
 	>"$artifact_dir/health-command.log" 2>&1 || true
 
 printf '\nEnvironment: %s\n' "$artifact_dir/environment.log"
