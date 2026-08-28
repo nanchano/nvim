@@ -1,0 +1,147 @@
+#!/usr/bin/env bash
+
+set -u
+set -o pipefail
+
+usage() {
+	cat <<'EOF'
+Usage: scripts/check-nvim [--clean]
+
+Run reproducible Neovim startup checks and write logs to .nvim-debug/latest.
+
+  (default)  Test the current config with the current plugin installation.
+  --clean    Copy the config into a temporary XDG environment, install the
+             lockfile versions there, and test a from-scratch installation.
+EOF
+}
+
+mode=current
+case "${1:-}" in
+	"") ;;
+	--clean) mode=clean ;;
+	-h|--help) usage; exit 0 ;;
+	*) usage >&2; exit 2 ;;
+esac
+
+repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+expected_nvim="NVIM v0.12.5"
+artifact_dir="$repo_dir/.nvim-debug/latest"
+rm -rf -- "$artifact_dir"
+mkdir -p -- "$artifact_dir"
+
+temp_dir=$(mktemp -d "${TMPDIR:-/tmp}/nvim-check.XXXXXX")
+trap 'rm -rf -- "$temp_dir"' EXIT
+
+if [[ $mode == clean ]]; then
+	mkdir -p -- "$temp_dir/config/nvim" "$temp_dir/data" "$temp_dir/state" "$temp_dir/cache"
+	cp -R -- "$repo_dir/init.lua" "$repo_dir/lua" "$temp_dir/config/nvim/"
+	[[ -f "$repo_dir/lazy-lock.json" ]] && cp -- "$repo_dir/lazy-lock.json" "$temp_dir/config/nvim/"
+	export XDG_CONFIG_HOME="$temp_dir/config"
+	export XDG_DATA_HOME="$temp_dir/data"
+	export XDG_STATE_HOME="$temp_dir/state"
+	export XDG_CACHE_HOME="$temp_dir/cache"
+fi
+
+cat > "$temp_dir/sample.lua" <<'EOF'
+local answer = 42
+print(answer)
+EOF
+cat > "$temp_dir/sample.json" <<'EOF'
+{"answer": 42}
+EOF
+cat > "$temp_dir/sample.md" <<'EOF'
+# Startup check
+EOF
+cat > "$temp_dir/sample.go" <<'EOF'
+package main
+func main() {}
+EOF
+cat > "$temp_dir/sample.gotmpl" <<'EOF'
+{{ .Values.name }}
+EOF
+cat > "$temp_dir/sample.py" <<'EOF'
+print("startup check")
+EOF
+cat > "$temp_dir/sample.yaml" <<'EOF'
+key: value
+EOF
+cat > "$temp_dir/sample.tf" <<'EOF'
+resource "null_resource" "startup_check" {}
+EOF
+
+error_pattern='Error detected|Error in command line|Failed to run|E[0-9][0-9][0-9]:|stack traceback|# stacktrace:'
+failures=0
+timeout_seconds=60
+
+run_check() {
+	local name=$1
+	shift
+	local log="$artifact_dir/$name.log"
+	local exit_code
+
+	NVIM_APPNAME=nvim timeout "${timeout_seconds}s" nvim --headless "$@" >"$log" 2>&1
+	exit_code=$?
+
+	if (( exit_code != 0 )) || grep -Eq "$error_pattern" "$log"; then
+		printf 'FAIL  %-16s (exit %s, %s)\n' "$name" "$exit_code" "$log"
+		failures=$((failures + 1))
+	else
+		printf 'PASS  %-16s (%s)\n' "$name" "$log"
+	fi
+}
+
+{
+	printf 'mode=%s\n' "$mode"
+	printf 'date=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+	printf 'config=%s\n' "$repo_dir"
+	nvim --version | sed -n '1,5p'
+} > "$artifact_dir/environment.log"
+
+if [[ $(nvim --version | head -n 1) != "$expected_nvim" ]]; then
+	printf 'FAIL  version          (expected %s)\n' "$expected_nvim"
+	exit 1
+fi
+
+if [[ $mode == clean ]]; then
+	timeout_seconds=300
+	run_check plugins '+Lazy! sync' '+qa'
+	if (( failures == 0 )); then
+		run_check tools '+MasonToolsInstallSync' '+qa'
+	fi
+	if (( failures == 0 )); then
+		export NVIM_INSTALL_PARSERS=1
+		run_check parsers '+qa'
+		unset NVIM_INSTALL_PARSERS
+	fi
+	timeout_seconds=60
+	if (( failures != 0 )); then
+		printf '\nClean installation failed; runtime checks were skipped.\n'
+		exit 1
+	fi
+fi
+
+run_check startup '+qa'
+run_check all-plugins '+Lazy load all' '+qa'
+run_check snippets '+lua assert(pcall(require, "luasnip-jsregexp"), "LuaSnip jsregexp module unavailable")' '+qa'
+run_check lua "$temp_dir/sample.lua" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+run_check lsp-lua "$temp_dir/sample.lua" '+lua assert(vim.wait(5000, function() return #vim.lsp.get_clients({ bufnr = 0 }) > 0 end, 100), "Lua LSP did not attach")' '+lua local client=vim.lsp.get_clients({ bufnr = 0 })[1]; assert(client.config.capabilities.textDocument.completion.completionItem.snippetSupport, "LSP completion capabilities missing")' '+qa'
+run_check json "$temp_dir/sample.json" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+run_check markdown "$temp_dir/sample.md" '+doautocmd BufReadPost' '+qa'
+run_check go "$temp_dir/sample.go" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+run_check gotmpl "$temp_dir/sample.gotmpl" '+doautocmd BufReadPost' '+lua assert(vim.bo.filetype == "gotmpl", "incorrect gotmpl filetype"); assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+run_check python "$temp_dir/sample.py" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+run_check yaml "$temp_dir/sample.yaml" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+run_check terraform "$temp_dir/sample.tf" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+
+# Health output is evidence for diagnosis, not a pass/fail gate: many providers
+# and language-specific tools are intentionally optional.
+NVIM_APPNAME=nvim timeout 45s nvim --headless "$temp_dir/sample.lua" '+checkhealth' '+write! '"$artifact_dir/health.log" '+qa' \
+	>"$artifact_dir/health-command.log" 2>&1 || true
+
+printf '\nEnvironment: %s\n' "$artifact_dir/environment.log"
+printf 'Health:      %s\n' "$artifact_dir/health.log"
+if (( failures != 0 )); then
+	printf 'Result:      FAIL (%d check(s))\n' "$failures"
+	exit 1
+fi
+printf 'Result:      PASS\n'

@@ -3,8 +3,13 @@ return {
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		"williamboman/mason.nvim",
+		"hrsh7th/cmp-nvim-lsp",
 	},
 	init = function()
+		vim.lsp.config("*", {
+			capabilities = require("cmp_nvim_lsp").default_capabilities(),
+		})
+
 		vim.lsp.config("yamlls", {
 			settings = {
 				yaml = {
@@ -69,11 +74,15 @@ return {
 
 				-- jump to previous diagnostic in buffer
 				opts.desc = "Go to previous diagnostic"
-				keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+				keymap.set("n", "[d", function()
+					vim.diagnostic.jump({ count = -1, float = true })
+				end, opts)
 
 				-- jump to next diagnostic in buffer
 				opts.desc = "Go to next diagnostic"
-				keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+				keymap.set("n", "]d", function()
+					vim.diagnostic.jump({ count = 1, float = true })
+				end, opts)
 
 				-- show documentation for what is under cursor
 				opts.desc = "Show documentation for what is under cursor"
@@ -86,7 +95,7 @@ return {
 		})
 
 		-- enable inlay hint
-		vim.lsp.inlay_hint.enable(true, { 0 })
+		vim.lsp.inlay_hint.enable(true)
 
 		-- lua: recognize "vim" and "mp" global
 		vim.lsp.config("lua_ls", {

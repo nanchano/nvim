@@ -1,0 +1,15 @@
+return {
+	"gopls",
+	"goimports",
+	"json-lsp",
+	"jsonlint",
+	"jq",
+	"lua-language-server",
+	"pyright",
+	"ruff",
+	"terraform",
+	"terraform-ls",
+	"tree-sitter-cli",
+	"typescript-language-server",
+	"yaml-language-server",
+}

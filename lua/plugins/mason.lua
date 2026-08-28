@@ -13,28 +13,23 @@ return {
 		},
 	},
 	{
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
+		dependencies = { "williamboman/mason.nvim" },
+		opts = {
+			ensure_installed = require("tooling"),
+			run_on_start = false,
+			start_delay = 0,
+		},
+	},
+	{
 		"williamboman/mason-lspconfig.nvim",
 		dependencies = { "williamboman/mason.nvim" },
 		event = { "BufReadPre", "BufNewFile" },
-		opts = {
-			ensure_installed = {
-				"jsonls",
-				"yamlls",
-				"lua_ls",
-				"pyright",
-				"gopls",
-				"ts_ls",
-				--"terraformls",
-			},
-		},
+		opts = {},
 	},
 	{
 		"rshkarin/mason-nvim-lint",
 		dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-lint" },
-		opts = {
-			ensure_installed = {
-				"jsonlint",
-			},
-		},
+		opts = { automatic_installation = false },
 	},
 }
