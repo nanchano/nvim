@@ -21,4 +21,18 @@ end, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
-vim.keymap.set("n", "<leader>m", "<cmd>Markview<cr>", { desc = "Toggle Markview previews globally" })
+vim.keymap.set("n", "<leader>m", function()
+	if vim.bo.filetype ~= "markdown" then
+		return
+	end
+
+	local renderer = require("render-markdown")
+	local tables = require("markdown-table-wrap")
+	if renderer.get() then
+		renderer.disable()
+		tables.disable_auto_preview()
+	else
+		renderer.enable()
+		tables.enable_auto_preview()
+	end
+end, { desc = "Toggle Markdown rendering" })

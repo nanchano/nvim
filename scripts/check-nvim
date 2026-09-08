@@ -59,6 +59,21 @@ EOF
 cat > "$temp_dir/sample.gotmpl" <<'EOF'
 {{ .Values.name }}
 EOF
+cat > "$temp_dir/sample.html" <<'EOF'
+<!doctype html><html><body><main>{{ .Title }}</main></body></html>
+EOF
+cat > "$temp_dir/sample.gohtmltmpl" <<'EOF'
+<!doctype html><html><body>{{ if .User }}<p>Hello, {{ .User.Name }}</p>{{ end }}</body></html>
+EOF
+cat > "$temp_dir/sample.css" <<'EOF'
+body { color: rebeccapurple; }
+EOF
+cat > "$temp_dir/bad.html" <<'EOF'
+<main><div></main>
+EOF
+cat > "$temp_dir/bad.css" <<'EOF'
+body { colr: red; }
+EOF
 cat > "$temp_dir/sample.py" <<'EOF'
 print("startup check")
 EOF
@@ -164,6 +179,13 @@ run_check json "$temp_dir/sample.json" '+doautocmd BufReadPost' '+lua assert(vim
 run_check markdown "$temp_dir/sample.md" '+doautocmd BufReadPost' '+qa'
 run_check go "$temp_dir/sample.go" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
 run_check gotmpl "$temp_dir/sample.gotmpl" '+doautocmd BufReadPost' '+lua assert(vim.bo.filetype == "gotmpl", "incorrect gotmpl filetype"); assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+run_check html "$temp_dir/sample.html" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+run_check css "$temp_dir/sample.css" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+run_check gohtmltmpl "$temp_dir/sample.gohtmltmpl" '+doautocmd BufReadPost' '+lua assert(vim.bo.filetype == "gohtmltmpl", "incorrect Go HTML template filetype"); assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
+run_check lsp-html "$temp_dir/sample.gohtmltmpl" '+lua assert(vim.wait(5000, function() return vim.lsp.get_clients({ bufnr = 0, name = "html" })[1] and vim.lsp.get_clients({ bufnr = 0, name = "superhtml" })[1] end, 100), "HTML LSPs did not attach")' '+lua local html=vim.lsp.get_clients({ bufnr = 0, name = "html" })[1]; local validator=vim.lsp.get_clients({ bufnr = 0, name = "superhtml" })[1]; assert(html.server_capabilities.documentFormattingProvider, "HTML formatting unavailable"); assert(not validator.server_capabilities.documentFormattingProvider, "superhtml formatting should be disabled")' '+lua local before=table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n"); require("conform").format({ async = false, timeout_ms = 5000, lsp_format = "fallback" }); local after=table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n"); assert(after ~= before, "HTML formatter made no changes"); assert(after:find("{{ .User.Name }}", 1, true), "HTML formatter damaged Go template syntax")' '+qa!'
+run_check lsp-css "$temp_dir/sample.css" '+lua assert(vim.wait(5000, function() return vim.lsp.get_clients({ bufnr = 0, name = "cssls" })[1] ~= nil end, 100), "CSS LSP did not attach")' '+lua assert(vim.lsp.get_clients({ bufnr = 0, name = "cssls" })[1].server_capabilities.documentFormattingProvider, "CSS formatting unavailable")' '+qa'
+run_check diagnostics-html "$temp_dir/bad.html" '+lua assert(vim.wait(5000, function() return #vim.diagnostic.get(0) > 0 end, 100), "HTML syntax diagnostic missing")' '+qa'
+run_check diagnostics-css "$temp_dir/bad.css" '+lua assert(vim.wait(5000, function() return #vim.diagnostic.get(0) > 0 end, 100), "CSS diagnostic missing")' '+qa'
 run_check python "$temp_dir/sample.py" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
 run_check yaml "$temp_dir/sample.yaml" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'
 run_check terraform "$temp_dir/sample.tf" '+doautocmd BufReadPost' '+lua assert(vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()], "Tree-sitter highlighting inactive")' '+qa'

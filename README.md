@@ -36,7 +36,7 @@ and does not require GNU `timeout`. The clipboard provider remains optional for
 headless startup but is needed for system clipboard integration.
 
 Mason owns the editor-specific tools, including language servers, Ruff,
-`goimports`, `jq`, Terraform, Terraform LS, and Tree-sitter CLI.
+`goimports`, `jq`, SuperHTML, Terraform, Terraform LS, and Tree-sitter CLI.
 The Tree-sitter CLI must be at least 0.26.1; the current Mason registry installs
 0.26.13. It is deliberately not installed through npm, following
 [nvim-treesitter's requirements](https://github.com/nvim-treesitter/nvim-treesitter#requirements).
@@ -56,11 +56,12 @@ scripts/check-nvim
 ```
 
 The suite verifies the exact Neovim version, plain startup, eager loading of all
-plugins, and representative Lua, JSON, Markdown, Go, Go-template, Python, YAML,
-and Terraform buffers. For supported filetypes it also verifies that Tree-sitter
-highlighting actually starts. Error output is treated as failure even when
-Neovim exits with status 0. Logs and a health report are saved under
-`.nvim-debug/latest/`.
+plugins, and representative Lua, JSON, Markdown, Go, Go-template, HTML, CSS,
+Python, YAML, and Terraform buffers. It also verifies HTML/CSS language-server
+attachment, formatting, and diagnostics, plus template-safe HTML formatting.
+For supported filetypes it verifies that Tree-sitter highlighting actually
+starts. Error output is treated as failure even when Neovim exits with status
+0. Logs and a health report are saved under `.nvim-debug/latest/`.
 
 Reproduce a day-0 install without modifying the live Neovim data directory:
 

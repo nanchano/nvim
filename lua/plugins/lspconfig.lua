@@ -24,6 +24,13 @@ return {
 			callback = function(ev)
 				local client = vim.lsp.get_client_by_id(ev.data.client_id)
 				if client then
+					-- html-lsp is the template-aware formatter. Keep superhtml focused
+					-- on structural diagnostics so formatting has one deterministic source.
+					if client.name == "superhtml" then
+						client.server_capabilities.documentFormattingProvider = false
+						client.server_capabilities.documentRangeFormattingProvider = false
+					end
+
 					-- Keep syntax colors controlled by Tree-sitter. Neovim otherwise
 					-- starts semantic-token highlighting after this callback runs.
 					client.server_capabilities.semanticTokensProvider = nil

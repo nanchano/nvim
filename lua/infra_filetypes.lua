@@ -1,7 +1,23 @@
+local function html_template_or(fallback)
+	return function(_, bufnr)
+		local content = table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, 100, false), "\n")
+		if content:find("<[%a][%w:-]*[%s>/]") or content:find("</[%a][%w:-]*%s*>") then
+			return "gohtmltmpl"
+		end
+		return fallback
+	end
+end
+
 vim.filetype.add({
 	extension = {
-		gotmpl = "gotmpl",
+		gohtml = "gohtmltmpl",
+		gohtmltmpl = "gohtmltmpl",
+		gotmpl = html_template_or("gotmpl"),
 		tf = "terraform",
+		tmpl = html_template_or("template"),
+	},
+	pattern = {
+		[".*%.html%.tmpl"] = "gohtmltmpl",
 	},
 })
 

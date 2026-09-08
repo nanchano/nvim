@@ -1,10 +1,14 @@
 local parsers = {
 	"bash",
+	"css",
 	"go",
 	"gotmpl",
 	"helm",
+	"html",
 	"json",
 	"lua",
+	"markdown",
+	"markdown_inline",
 	"python",
 	"terraform",
 	"yaml",
@@ -12,11 +16,15 @@ local parsers = {
 
 local filetypes = {
 	"bash",
+	"css",
 	"go",
+	"gohtmltmpl",
 	"gotmpl",
 	"helm",
+	"html",
 	"json",
 	"lua",
+	"markdown",
 	"python",
 	"sh",
 	"terraform",
@@ -31,6 +39,7 @@ return {
 		build = ":TSUpdate",
 		config = function()
 			local treesitter = require("nvim-treesitter")
+			vim.treesitter.language.register("html", "gohtmltmpl")
 			treesitter.setup()
 			local bootstrap = vim.env.NVIM_INSTALL_PARSERS == "1"
 			local interactive = #vim.api.nvim_list_uis() > 0
