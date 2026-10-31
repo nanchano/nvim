@@ -28,6 +28,17 @@ return {
 				end
 			end
 
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "MiniFilesBufferCreate",
+				callback = function(args)
+					vim.keymap.set("n", "<CR>", function()
+						files.go_in({ close_on_file = true })
+					end, {
+						buffer = args.data.buf_id,
+						desc = "Open selected file",
+					})
+				end,
+			})
 			vim.keymap.set("n", "<leader>f", function()
 				local path = vim.api.nvim_buf_get_name(0)
 				toggle(path ~= "" and path or nil)
